@@ -1,5 +1,5 @@
-conf_filename="<filename-for-config-in-sites-available>"
-domain="<domain>"
+conf_filename="<conf_filename>"
+domain="<domain>s"
 well_known_path="<.well-known-path>"
 
 cat scripts/deploy-app/resources/nginx.conf | sed "s/<domain>/$domain/; s|<.well-known-path>|$well_known_path|" > /etc/nginx/sites-available/$conf_filename
