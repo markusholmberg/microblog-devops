@@ -21,8 +21,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     followers = db.Table('followers',
-        db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
-        db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+                         db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+                         db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
     )
 
     followed = db.relationship(
