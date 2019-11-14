@@ -29,7 +29,7 @@ def test_new_user(user1):
     assert user1.about_me == 'Hello'
     assert str(user1) == "<User john, john@example.com>"
 
-def test_follow(test_app):
+def test_follow():
     """
     Test that checks if follow a user is working
     """
@@ -55,7 +55,7 @@ def test_follow(test_app):
     assert u1.followed.count() == 0
     assert u2.followers.count() == 0
 
-def test_follow_posts(test_app):
+def test_follow_posts():
     """
     Test to see if you can follow a post
     """
