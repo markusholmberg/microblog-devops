@@ -2,6 +2,7 @@
 Contains tests for app.models.User class
 """
 # pylint: disable=redefined-outer-name
+#pylint: disable=unused-argument
 from datetime import datetime, timedelta
 from unittest import mock
 import pytest
