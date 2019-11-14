@@ -2,10 +2,11 @@
 Contains tests for app.models.User class
 """
 # pylint: disable=redefined-outer-name
+from datetime import datetime, timedelta
 from unittest import mock
 import pytest
-from app import db
 from app.models import User, Post
+from app import db
 
 @pytest.fixture
 def user1():
@@ -28,7 +29,7 @@ def test_new_user(user1):
     assert user1.about_me == 'Hello'
     assert str(user1) == "<User john, john@example.com>"
 
-def test_follow(self, test_app):
+def test_follow(test_app):
     u1 = User(username='john', email='john@example.com')
     u2 = User(username='susan', email='susan@example.com')
     db.session.add(u1)
@@ -51,7 +52,7 @@ def test_follow(self, test_app):
     assert u1.followed.count() == 0
     assert u2.followers.count() == 0
 
-def test_follow_posts(self, test_app):
+def test_follow_posts(test_app):
     # create four users
     u1 = User(username='john', email='john@example.com')
     u2 = User(username='susan', email='susan@example.com')
