@@ -49,18 +49,30 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def follow(self, user):
+        """
+        Follows a user
+        """
         if not self.is_following(user):
             self.followed.append(user)
 
     def unfollow(self, user):
+        """
+        Unfollows a user
+        """
         if self.is_following(user):
             self.followed.remove(user)
 
     def is_following(self, user):
+        """
+        Checks if you are following a user
+        """
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
 
     def followed_posts(self):
+        """
+        Check which posts you are following
+        """
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
                 followers.c.follower_id == self.id)

@@ -30,6 +30,9 @@ def test_new_user(user1):
     assert str(user1) == "<User john, john@example.com>"
 
 def test_follow(test_app):
+    """
+    Test that checks if follow a user is working
+    """
     u1 = User(username='john', email='john@example.com')
     u2 = User(username='susan', email='susan@example.com')
     db.session.add(u1)
@@ -53,6 +56,9 @@ def test_follow(test_app):
     assert u2.followers.count() == 0
 
 def test_follow_posts(test_app):
+    """
+    Test to see if you can follow a post
+    """
     # create four users
     u1 = User(username='john', email='john@example.com')
     u2 = User(username='susan', email='susan@example.com')
