@@ -87,7 +87,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-@app.route('/follow/<username>')
+@bp.route('/follow/<username>')
 @login_required
 def follow(username):
     user = User.query.filter_by(username=username).first()
@@ -102,7 +102,7 @@ def follow(username):
     flash('You are following {}!'.format(username))
     return redirect(url_for('user', username=username))
 
-@app.route('/unfollow/<username>')
+@bp.route('/unfollow/<username>')
 @login_required
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
