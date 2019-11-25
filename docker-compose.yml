@@ -20,8 +20,10 @@ services:
             dbwebb:
         restart:
             "always"
-    prod:        
-        image: microblog:latest
+    prod:
+        build:
+            dockerfile: docker/Dockerfile_prod
+            context: .
         container_name: microblog
         ports:
             - "8000:5000"
