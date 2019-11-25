@@ -1,0 +1,20 @@
+FROM python:3.6-alpine
+
+RUN adduser -D test
+
+WORKDIR /home/test
+
+COPY requirements.txt requirements.txt
+COPY requirements/ requirements/
+RUN python -m venv venv
+RUN apk --update add --virtual build-dependencies make libffi-dev openssl-dev python-dev py-pip build-base \
+  && venv/bin/pip install --upgrade pip \
+  && venv/bin/pip install -r requirements.txt \
+  && venv/bin/pip install -r requirements/test.txt
+
+COPY test.sh ./
+RUN chown -R test:test ./
+USER test
+
+ENTRYPOINT ["./test.sh"]
+
