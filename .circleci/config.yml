@@ -47,8 +47,8 @@ jobs:
                 docker push $IMAGE_NAME:latest
 workflows:
    version: 2
-      build-master:
-        jobs:
+   build-master:
+       jobs:
           - build:
               filters:
                 branches:
