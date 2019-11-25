@@ -1,12 +1,12 @@
-version: 2.1
-    executors:
-      docker-publisher:
+version: 2
+executors:
+   docker-publisher:
         environment:
           IMAGE_NAME: mahm17/microblog
         docker:
           - image: circleci/buildpack-deps:stretch
-    jobs:
-      build:
+jobs:
+    build:
         executor: docker-publisher
         steps:
           - checkout
@@ -22,7 +22,7 @@ version: 2.1
               root: .
               paths:
                 - ./image.tar
-      test:
+    test:
         executor: docker-publisher
         steps:
           - checkout
@@ -31,7 +31,7 @@ version: 2.1
               name: Run the tests
               command: make exec-tests
 
-      publish-latest:
+    publish-latest:
         executor: docker-publisher
         steps:
           - attach_workspace:
@@ -45,8 +45,8 @@ version: 2.1
               command: |
                 echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
                 docker push $IMAGE_NAME:latest
-    workflows:
-      version: 2
+workflows:
+   version: 2
       build-master:
         jobs:
           - build:
