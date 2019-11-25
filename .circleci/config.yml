@@ -2,7 +2,7 @@ version: 2.1
 executors:
    docker-publisher:
         environment:
-          IMAGE_NAME: mahm17/microblog
+          IMAGE_NAME: microblog
         docker:
           - image: circleci/buildpack-deps:stretch
 jobs:
