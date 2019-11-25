@@ -72,18 +72,20 @@ workflows:
                 branches:
                   only: master
           - build:
+              requires:
+                - setup
               filters:
                 branches:
                   only: master
           - test:
               requires:
-                - setup 
+                - build 
               filters:
                 branches:
                   only: master
           - publish-latest:
               requires:
-                - build
+                - test
               filters:
                 branches:
                   only: master
