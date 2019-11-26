@@ -21,9 +21,7 @@ services:
         restart:
             "always"
     prod:
-        build:
-            dockerfile: docker/Dockerfile_prod
-            context: .
+        image: mahm17/microblog:latest
         container_name: microblog
         ports:
             - "8000:5000"
