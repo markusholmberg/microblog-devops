@@ -34,5 +34,7 @@ services:
             - DATABASE_URL=mysql+pymysql://microblog:zxcqweasd123@db:3306/microblog_db
         links:
             - db:database
+        restart:
+            "always"
         networks:
             dbwebb:
