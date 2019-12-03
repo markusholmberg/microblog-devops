@@ -110,3 +110,9 @@ workflows:
                 filters:
                     branches:
                         only: master
+            - ansible:
+                requires:
+                    - publish-latest
+                filters:
+                    branches:
+                        only: master
