@@ -1,0 +1,11 @@
+---
+root_password: $6$yzdL/HUSVLMgths9$pjhXh.i2PgF8K//2EhEkHfCeP/fGzQjrs7ooohuoDKszefikTeEtsQmLxslwzBcArU0miIEtVNahNP9AwXGC1.
+
+server_user: deploy
+server_user_password: $6$.K9LmPAKpekKc2PB$fRCGvArA6QwqeZPbK4fTFYremJtuWutlGb9xkg8Lrht1ppqS25UUT7elC4ku4M20Xp3uoCbcW.GmaVIMqPp0O/
+
+server_user_groups:
+    -   sudo
+
+pub_ssh_key_location:
+    -   ~/.ssh/aws_public.pub

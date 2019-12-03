@@ -77,7 +77,7 @@ help:
 .PHONY: add-ssh
 add-ssh:
 	eval `ssh-agent -s`
-	ssh-add <path/too/ssh-key>
+	ssh-add C:/Users/Markus/.ssh/aws.pem
 
 
 
@@ -135,9 +135,8 @@ exec-tests: test-unit test-integration
 
 # target: test                         - Run tests and display code coverage
 .PHONY: test
-test: validate exec-tests
-	${py} -m coverage report  --rcfile=.coveragerc
-	$(MAKE) clean-cov
+test:
+	docker-compose up test
 
 
 
@@ -199,4 +198,3 @@ install-test:
 .PHONY: install-deploy
 install-deploy:
 	${pip} install -r requirements/deploy.txt
-

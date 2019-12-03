@@ -3,6 +3,9 @@ networks:
     dbwebb:
 services:
     test:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile_test
         image: test:latest
         volumes:
             - "./:/home/test/tests"
