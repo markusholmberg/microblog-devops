@@ -84,7 +84,8 @@ jobs:
                 name: Run ansible playbook
                 command: |
                     . venv/bin/activate
-                    ansible-playbook ansible/gather_aws_instances.yml ansible/appServer.yml
+                    ansible-playbook gather_aws_instances.yml appServer.yml
+                working_directory: ansible
 workflows:
     version: 2
     build-master:
