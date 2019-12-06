@@ -1,30 +1,30 @@
 ---
 
--   name: Update apt-cache and upgrade
-    apt:
-        force_apt_get: yes
-        update_cache: "True"
-        cache_valid_time: 3600
-        upgrade: yes
-
--   name: Install prerequisites
-    apt:
-        name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2' ,'software-properties-common', python-pip]
-
--   name: Add Docker GPG key
-    apt_key: url=https://download.docker.com/linux/ubuntu/gpg
-
--   name: Add Docker APT repository
-    apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/{{ansible_distribution|lower}} {{ansible_distribution_release}} stable
-
--   name: Install Docker
-    apt:
-        name: docker-ce
-
--   name: Install Docker Module for Python
-    pip:
-        name: docker
+# -   name: Update apt-cache and upgrade
+#     apt:
+#         force_apt_get: yes
+#         update_cache: "True"
+#         cache_valid_time: 3600
+#         upgrade: yes
+#
+# -   name: Install prerequisites
+#     apt:
+#         name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg2' ,'software-properties-common', python-pip]
+#
+# -   name: Add Docker GPG key
+#     apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+#
+# -   name: Add Docker APT repository
+#     apt_repository:
+#         repo: deb [arch=amd64] https://download.docker.com/linux/{{ansible_distribution|lower}} {{ansible_distribution_release}} stable
+#
+# -   name: Install Docker
+#     apt:
+#         name: docker-ce
+#
+# -   name: Install Docker Module for Python
+#     pip:
+#         name: docker
 
 -   name: Start microblog container
     docker_container:
@@ -33,7 +33,8 @@
         env:
             SECRET_KEY: "my-secret-key"
             DATABASE_URL: mysql+pymysql://microblog:zxcqweasd123@{{ groups.database[0] }}:3306/microblog_db
-        ports:
-            - "8000:5000"
-        exposed_ports:
-            - "8000"
+        # ports:
+        #     - "8000:5000"
+        # exposed_ports:
+        #     - "8000"
+        network_mode: host
