@@ -26,15 +26,39 @@
 #     pip:
 #         name: docker
 
--   name: Create a database container
-    docker_container:
-        name: database_container
-        image: mysql/mysql-server:5.7
-        env:
-            MYSQL_ROOT_PASSWORD: admin
-            MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-            MYSQL_DATABASE: microblog_db
-            MYSQL_USER: microblog
-            MYSQL_PASSWORD: zxcqweasd123
-        ports:
-            - "3306:3306"
+# -   name: Create a database container
+#     docker_container:
+#         name: database_container
+#         image: mysql/mysql-server:5.7
+#         env:
+#             MYSQL_ROOT_PASSWORD: admin
+#             MYSQL_DATABASE: microblog_db
+#             MYSQL_USER: microblog
+#             MYSQL_PASSWORD: zxcqweasd123
+#         ports:
+#             - "3306:3306"
+
+# -   name: Access MySQL container
+#     command: sudo docker exec -it 4e0f295b8512 mysql -uroot -p > files/user.sql
+
+# -   name: Pull mysql exporter container
+#     command: docker pull prom/mysqld-exporter
+# #
+# -   name: Start exporter container
+#     command: |
+#         docker run -d
+#         -p 9104:9104
+#         --network host
+#         -e DATA_SOURCE_NAME="exporter:admin@(localhost:3306)/"
+#         --restart always
+#         prom/mysqld-exporter:latest
+#         --collect.auto_increment.columns
+#         --collect.binlog_size
+#         --collect.engine_innodb_status
+#         --collect.engine_tokudb_status
+#         --collect.global_status
+
+-   name: Edit prometheus config file
+    template:
+        src: files/prometheus.yml
+        dest: /home/deploy/prometheus-2.10.0.linux-amd64/prometheus.yml

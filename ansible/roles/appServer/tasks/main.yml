@@ -26,15 +26,27 @@
 #     pip:
 #         name: docker
 
--   name: Start microblog container
-    docker_container:
-        name: microblog
-        image: mahm17/microblog:latest
-        env:
-            SECRET_KEY: "my-secret-key"
-            DATABASE_URL: mysql+pymysql://microblog:zxcqweasd123@{{ groups.database[0] }}:3306/microblog_db
-        # ports:
-        #     - "8000:5000"
-        # exposed_ports:
-        #     - "8000"
-        network_mode: host
+# -   name: Start microblog container
+#     docker_container:
+#         name: microblog
+#         image: mahm17/microblog:latest
+#         env:
+#             SECRET_KEY: "my-secret-key"
+#             DATABASE_URL: mysql+pymysql://microblog:zxcqweasd123@{{ groups.database[0] }}:3306/microblog_db
+#         # ports:
+#         #     - "8000:5000"
+#         # exposed_ports:
+#         #     - "8000"
+#         network_mode: host
+#         pull: yes
+
+-   name: Pull the statsd container
+    command: docker pull prom/statsd-exporter
+
+-   name: Template the statsd conf file
+    template:
+        src: files/statsd.conf2
+        dest: statsd.conf
+
+-   name: Start the statsd container
+    command: docker run -dP --net=host -v ${PWD}/statsd.conf:/statsd/statsd.conf prom/statsd-exporter "--statsd.mapping-config=/statsd/statsd.conf"

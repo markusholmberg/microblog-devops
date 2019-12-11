@@ -31,5 +31,8 @@ http {
        location / {
           proxy_pass http://app-hosts;
        }
+       location /metrics {
+            stub_status on;
+        }
     }
 }

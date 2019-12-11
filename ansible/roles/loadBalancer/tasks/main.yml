@@ -1,5 +1,5 @@
 ---
--   import_tasks: docker_install.yml
+# -   import_tasks: docker_install.yml
 # -   name: Install packages
 #     apt:
 #         name:
@@ -47,3 +47,6 @@
 #         dest: /etc/nginx/sites-enabled/load-balancer.conf
 #         owner: deploy
 #         state: link
+
+-   name: Run the nginx exporter in docker
+    command: docker run -p 9113:9113 -d nginx/nginx-prometheus-exporter:0.4.2 -nginx.scrape-uri=https://holmberg.software/metrics -nginx.retries=10 -nginx.ssl-verify=false -web.telemetry-path=/prometheus
