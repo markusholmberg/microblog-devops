@@ -60,6 +60,8 @@ jobs:
             - run:
                 name: Load archived Docker image
                 command: docker load -i /tmp/workspace/image.tar
+            - snyk/scan:
+                docker-image-name: $IMAGE_NAME
             - run:
                 name: Publish Docker Image to Docker Hub
                 command: |
@@ -103,8 +105,7 @@ jobs:
                     . venv/bin/activate
                     make install
             - run: echo "source ~/repo/venv/bin/activate" >> $BASH_ENV # här gör vi så att så att CircleCi automatisk laddar venv och då kollar Snyk har installerat i den.
-            - snyk/scan:
-                docker-image-name: $IMAGE_NAME
+            - snyk/scan
 
 workflows:
     version: 2
@@ -120,15 +121,9 @@ workflows:
                 filters:
                     branches:
                         only: master
-            - snyk:
-                requires:
-                    - build
-                filters:
-                    branches:
-                        only: master
             - test:
                 requires:
-                    - snyk
+                    - build
                 filters:
                     branches:
                         only: master
@@ -141,6 +136,12 @@ workflows:
             - ansible:
                 requires:
                     - publish-latest
+                filters:
+                    branches:
+                        only: master
+            - snyk:
+                requires:
+                    - ansible
                 filters:
                     branches:
                         only: master
