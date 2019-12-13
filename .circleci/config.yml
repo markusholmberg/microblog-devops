@@ -91,11 +91,11 @@ jobs:
                 working_directory: ansible
 
     snyk:
-    docker:
-        - image: circleci/python:3.5
-    working_directory: ~/repo
-    steps:
-        - checkout
+        docker:
+            - image: circleci/python:3.5
+            working_directory: ~/repo
+        steps:
+            - checkout
         - run:
             name: install dependencies
             command: |
