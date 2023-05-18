@@ -77,7 +77,7 @@ help:
 .PHONY: add-ssh
 add-ssh:
 	eval `ssh-agent -s`
-	ssh-add C:/Users/Markus/.ssh/aws.pem
+	ssh-add /home/markus/.ssh/id_rsa
 
 
 
@@ -198,3 +198,14 @@ install-test:
 .PHONY: install-deploy
 install-deploy:
 	${pip} install -r requirements/deploy.txt
+	cd ansible && ansible-galaxy install -r requirements.yml
+
+#target: bandit
+.PHONY: bandit
+bandit:
+	bandit -r app
+
+#target: Zap
+.PHONY: Zap
+Zap:
+	docker run owasp/zap2docker-weekly zap-baseline.py -t https://holmberg.software

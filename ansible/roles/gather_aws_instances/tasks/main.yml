@@ -1,21 +1,46 @@
 ---
--   name: Gather EC2 facts about running instances
-    ec2_instance_facts:
-        region: "{{ region }}"
-    delegate_to: 127.0.0.1
-    register: ec2_facts
+-   name: Get facts by tags
+    azure_rm_virtualmachine_info:
+        resource_group: "{{ resource_group }}"
+    delegate_to: localhost
+    register: az_facts
 
-
+-   name: Display all variables/facts known for a host
+    debug:
+        var: az_facts
 
 -   name: add instance to hosts
     add_host:
-        name: "{{ item.public_ip_address }}"
-        groups: "{{ item.tags.values() | list }}"
-    with_items: "{{ ec2_facts.instances }}"
-    when: item.public_ip_address is defined and item.state.name == "running"
+        name: "{{ item.tags.PublicIP }}"
+        groups:
+        - "{{ item.name[0:-3] }}"
+        - devops
+    with_items: "{{ az_facts.vms }}"
+    when: item.tags.PublicIP is defined and item.power_state == "running"
+    #when: item.tags.PublicIP is defined
 
+-   name: Display all variables/facts known for a host
+    debug:
+        var: hostvars
 
-
--   name: Display Instance types
-    debug: 
-        msg: "{{ ec2_facts.instances }}"
+#AWS stuff---
+#-   name: Gather EC2 facts about running instances
+#    ec2_instance_facts:
+#        region: "{{ region }}"
+#    delegate_to: 127.0.0.1
+#    register: ec2_facts
+#
+#
+#
+#-   name: add instance to hosts
+#    add_host:
+#        name: "{{ item.public_ip_address }}"
+#        groups: "{{ item.tags.values() | list }}"
+#    with_items: "{{ ec2_facts.instances }}"
+#    when: item.public_ip_address is defined and item.state.name == "running"
+#
+#
+#
+#-   name: Display Instance types
+#    debug: 
+#        msg: "{{ ec2_facts.instances }}"

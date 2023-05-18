@@ -8,4 +8,4 @@ server_user_groups:
     -   sudo
 
 pub_ssh_key_location:
-    -   ~/.ssh/aws_public.pub
+    -   ~/.ssh/id_rsa.pub

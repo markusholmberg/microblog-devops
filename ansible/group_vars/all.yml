@@ -1,8 +1,13 @@
 ---
 # Here you can add variables that will be available for all hosts.
 
-region: us-east-1
-project_name: devops
-domain_name: holmberg.software
-admin_email: holmbergmarkus1997@gmail.com
-lb_method: least_conn
+region: northeurope
+resource_group: dev-ops-group
+#project_name: devops
+domain_name: mahm.online
+#admin_email: holmbergmarkus1997@gmail.com
+#lb_method: least_conn
+root_user: azureuser
+vmtags:
+    StudentId: "mahm17"
+local_ssh_location: '/home/markus/.ssh/id_rsa.pub'

@@ -1,52 +1,51 @@
 ---
-# -   import_tasks: docker_install.yml
-# -   name: Install packages
-#     apt:
-#         name:
-#           - nginx
-#           - python-certbot-nginx
-#         state: present
-#
-# -   name: Check if certificate already exists.
-#     stat:
-#         path: /etc/letsencrypt/live/{{ domain_name }}/cert.pem
-#     register: letsencrypt_cert
-#
-# -   debug: msg="{{ letsencrypt_cert.stat.exists }}"
-#
-# -   name: Stop services to allow certbot to generate a cert.
-#     command: service nginx stop
-#     when: not letsencrypt_cert.stat.exists
-#
-# -   name: Generate new certificate if one doesn't exist.
-#     shell: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
-#     when: not letsencrypt_cert.stat.exists
-#
-# -   name: Remove default conf
-#     file:
-#         state: absent
-#         path: /etc/nginx/sites-enabled/default
-#
-# -   name: Template load-balancer conf file to server
-#     template:
-#         src: files/load-balancer.conf.j2
-#         dest: /etc/nginx/sites-available/load-balancer.conf
-#         owner: deploy
-#         mode: "0400"
-#
-# -   name: Template nginx conf file to server
-#     template:
-#         src: files/nginx.conf.j2
-#         dest: /etc/nginx/nginx.conf
-#         owner: deploy
-#         mode: "0400"
-#
-# -   name: Create a symbolic link
-#     file:
-#         src: /etc/nginx/sites-available/load-balancer.conf
-#         dest: /etc/nginx/sites-enabled/load-balancer.conf
-#         owner: deploy
-#         state: link
+-   import_tasks: docker_install.yml
+-   name: Install packages
+    apt:
+        name:
+          - nginx
+          - python-certbot-nginx
+        state: present
 
--   name: Run the nginx exporter in docker
-    command: docker run -p 9113:9113 -d nginx/nginx-prometheus-exporter:0.4.2 -nginx.scrape-uri=https://holmberg.software/metrics -nginx.retries=10 -nginx.ssl-verify=false -web.telemetry-path=/prometheus
+-   name: Check if certificate already exists.
+    stat:
+        path: /etc/letsencrypt/live/{{ domain_name }}/cert.pem
+    register: letsencrypt_cert
+
+-   debug: msg="{{ letsencrypt_cert.stat.exists }}"
+
+-   name: Stop services to allow certbot to generate a cert.
+    command: service nginx stop
+    when: not letsencrypt_cert.stat.exists
+
+-   name: Generate new certificate if one doesn't exist.
+    shell: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
+    when: not letsencrypt_cert.stat.exists
+
+-   name: Remove default conf
+    file:
+        state: absent
+        path: /etc/nginx/sites-enabled/default
+
+-   name: Template load-balancer conf file to server
+    template:
+        src: files/load-balancer.conf.j2
+        dest: /etc/nginx/sites-available/load-balancer.conf
+        owner: deploy
+        mode: "0400"
+
+-   name: Template nginx conf file to server
+    template:
+        src: files/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: deploy
+        mode: "0400"
+-   name: Create a symbolic link
+    file:
+        src: /etc/nginx/sites-available/load-balancer.conf
+        dest: /etc/nginx/sites-enabled/load-balancer.conf
+        owner: deploy
+        state: link
+
+#-   name: Run the nginx exporter in docker
+#    command: docker run -p 9113:9113 -d nginx/nginx-prometheus-exporter:0.4.2 -nginx.scrape-uri=https://holmberg.software/metrics -nginx.retries=10 -nginx.ssl-verify=false -web.telemetry-path=/prometheus
