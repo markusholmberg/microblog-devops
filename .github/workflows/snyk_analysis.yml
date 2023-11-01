@@ -1,10 +1,9 @@
 name: snyk-analysis 
 on:
-  workflow_dispatch:
   push: 
-    branches: [master]
+    branches: ["master"]
   pull_request:
-    branches: [master]
+    branches: ["master"]
 jobs:     
   snyk-analysis:
     runs-on: ubuntu-latest
