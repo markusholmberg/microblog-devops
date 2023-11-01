@@ -8,4 +8,4 @@
             - azure.azcollection
         roles:
             -   provision_instances
-            #-   security_groups
+            -   security_groups

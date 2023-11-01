@@ -1,0 +1,10 @@
+packages:
+  - python3-pip
+  - python3-setuptools
+  - python-pkg-resources
+
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-compose-plugin

@@ -1,24 +1,51 @@
-FROM python:3.6-alpine
-
+FROM python:3.8-alpine
 RUN adduser -D microblog
 
 WORKDIR /home/microblog
 
-COPY requirements.txt requirements.txt
-COPY requirements/ requirements/
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements.txt
-RUN venv/bin/pip install gunicorn pymysql
-
+# COPY . .
 COPY app app
 COPY migrations migrations
-COPY microblog.py boot.sh ./
-RUN chmod +x boot.sh
+COPY requirements requirements
+COPY requirements.txt microblog.py boot.sh ./
+COPY gunicorn_config.py gunicorn_config.py
+
+RUN python -m venv venv
+RUN venv/bin/pip3 install -r requirements.txt
 
 ENV FLASK_APP microblog.py
 
+RUN chmod +x boot.sh
 RUN chown -R microblog:microblog ./
+
 USER microblog
+
+ENV prometheus_multiproc_dir /tmp
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
+
+#FROM python:3.8-alpine
+#
+#RUN adduser -D microblog
+#
+#WORKDIR /home/microblog
+#
+#COPY requirements.txt requirements.txt
+#COPY requirements/ requirements/
+#RUN python -m venv venv
+#RUN venv/bin/pip3 install -r requirements.txt
+#RUN venv/bin/pip3 install gunicorn pymysql
+
+#COPY app app
+#COPY migrations migrations
+#COPY microblog.py boot.sh ./
+#RUN chmod +x boot.sh
+
+#ENV FLASK_APP microblog.py
+#
+#RUN chown -R microblog:microblog ./
+#USER microblog
+#
+#EXPOSE 5000
+#ENTRYPOINT ["./boot.sh"]

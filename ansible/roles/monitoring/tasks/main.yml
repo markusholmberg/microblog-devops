@@ -1,17 +1,53 @@
 ---
-# -   import_tasks: docker_install.yml
+-   import_tasks: docker_install.yml
 
-# -   name: install Node Exporter
-#     get_url:
-#         url: https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
-#         dest: /home/node_exporter-0.18.1.linux-amd64.tar.gz
-#
-# -   name: Extract archive
-#     unarchive:
-#         src: /home/node_exporter-0.18.1.linux-amd64.tar.gz
-#         dest: /home/node_exporter-0.18.1.linux-amd64
-#         remote_src: yes
-#
+-   name: Create network
+    docker_network:
+        name: monitor
+        state: present
+
+-   name: Setup node exporter
+    docker_container:
+        name: node_exporter
+        image: prom/node-exporter:v1.2.2
+        volumes:
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/rootfs:ro
+        command:
+            - '--path.procfs=/host/proc'
+            - '--path.rootfs=/rootfs'
+            - '--path.sysfs=/host/sys'
+            - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+        ports:
+            - "9100:9100"
+        restart_policy: "unless-stopped"
+
+- name: Create the nginx-prometheus-exporter container
+  community.docker.docker_container:
+    name: nginx-exporter
+    image: nginx/nginx-prometheus-exporter:0.4.2
+    command: [
+      '--nginx.scrape-uri=https://{{ domain_name }}/metrics',
+      '--nginx.retries=10',
+      '--nginx.ssl-verify=false',
+      '--web.telemetry-path=/prometheus',
+    ]
+    ports:
+      - "9113:9113"
+    state: started
+
+#-   name: install Node Exporter
+#    get_url:
+#        url: https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+#        dest: /home/node_exporter-0.18.1.linux-amd64.tar.gz
+
+#-   name: Extract archive
+#    unarchive:
+#        src: /home/node_exporter-0.18.1.linux-amd64.tar.gz
+#        dest: /home/node_exporter-0.18.1.linux-amd64
+#        remote_src: yes
+
 # -   name: Create a user
 #     user:
 #         name: node_exporter
@@ -81,18 +117,18 @@
 #         dest: /home/deploy
 #         remote_src: yes
 
--   name: Edit prometheus config file
-    template:
-        src: files/prometheus.yml
-        dest: /home/deploy/prometheus-2.10.0.linux-amd64/prometheus.yml
+#-   name: Edit prometheus config file
+#    template:
+#        src: files/prometheus.yml
+#        dest: /home/deploy/prometheus-2.10.0.linux-amd64/prometheus.yml
 
--   name: Kill prometheus service
-    command: sudo pkill prometheus
+#-   name: Kill prometheus service
+#    command: sudo pkill prometheus
 
--   name: Start prometheus service
-    shell: nohup ./prometheus > prometheus.log 2>&1 &
-    args:
-        chdir: prometheus-2.10.0.linux-amd64
+#-   name: Start prometheus service
+#    shell: nohup ./prometheus > prometheus.log 2>&1 &
+#    args:
+#        chdir: prometheus-2.10.0.linux-amd64
 
 # -   name: Download Grafana
 #     get_url:

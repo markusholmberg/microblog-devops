@@ -1,0 +1,12 @@
+packages:
+  - python3-pip
+  - python3-setuptools
+  - python-pkg-resources
+
+docker_requirements:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-compose-plugin
+
+ansible_python_interpreter: /usr/bin/python3

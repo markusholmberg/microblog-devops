@@ -5,8 +5,8 @@ region: northeurope
 resource_group: dev-ops-group
 #project_name: devops
 domain_name: mahm.online
-#admin_email: holmbergmarkus1997@gmail.com
-#lb_method: least_conn
+admin_email: holmbergmarkus1997@gmail.com
+lb_method: least_conn
 root_user: azureuser
 vmtags:
     StudentId: "mahm17"

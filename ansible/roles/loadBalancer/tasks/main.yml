@@ -1,10 +1,10 @@
 ---
 -   import_tasks: docker_install.yml
+
 -   name: Install packages
     apt:
-        name:
-          - nginx
-          - python-certbot-nginx
+        force_apt_get: yes
+        name: "{{ packages }}"
         state: present
 
 -   name: Check if certificate already exists.
@@ -31,21 +31,33 @@
     template:
         src: files/load-balancer.conf.j2
         dest: /etc/nginx/sites-available/load-balancer.conf
-        owner: deploy
-        mode: "0400"
+    notify:
+        - restart nginx
 
 -   name: Template nginx conf file to server
     template:
         src: files/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
-        owner: deploy
-        mode: "0400"
+    notify:
+        - restart nginx
+
 -   name: Create a symbolic link
     file:
         src: /etc/nginx/sites-available/load-balancer.conf
         dest: /etc/nginx/sites-enabled/load-balancer.conf
         owner: deploy
         state: link
+
+-   name: ensure nginx is at the latest version
+    apt: name=nginx state=latest
+
+-   name: Start nginx
+    service:
+        name: nginx
+        state: started
+        enabled: yes
+    notify:
+        - restart nginx
 
 #-   name: Run the nginx exporter in docker
 #    command: docker run -p 9113:9113 -d nginx/nginx-prometheus-exporter:0.4.2 -nginx.scrape-uri=https://holmberg.software/metrics -nginx.retries=10 -nginx.ssl-verify=false -web.telemetry-path=/prometheus

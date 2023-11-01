@@ -1,0 +1,32 @@
+---
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: latest
+
+- name: Add the Docker GPG apt key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/debian buster stable
+    state: present
+
+- name: Install Docker with pip
+  ansible.builtin.pip:
+    name: docker
+
+- name: Install the Docker requirements
+  ansible.builtin.apt:
+    name: "{{ docker_requirements }}"
+    update-cache: true
+    state: present
+
+- name: Ensure service is enabled
+  sysvinit: 
+    name: docker
+    state: started
+    enabled: yes
+    #service docker restart
