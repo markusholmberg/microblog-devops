@@ -2,6 +2,8 @@ http {
     upstream app-hosts {
         server {{ groups['appServer'][0] }}:8000;
     }
+    proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
+    add_header Content-Security-Policy "default-src 'self';";
 
     access_log /var/log/nginx/access.log;
     error_log /var/log/nginx/error.log;
@@ -22,9 +24,9 @@ http {
         listen 443 ssl;
         server_name  {{ domain_name }} www.{{ domain_name }};
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
-        #add_header X-Frame-Options sameorigin always;
-        #add_header x-xss-protection "1; mode=block" always;
-        #add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options sameorigin always;
+        add_header x-xss-protection "1; mode=block" always;
+        add_header X-Content-Type-Options nosniff;
 
         ssl_certificate /etc/letsencrypt/live/{{ domain_name }}/cert.pem;
         ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;

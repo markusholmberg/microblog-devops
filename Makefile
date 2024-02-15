@@ -208,4 +208,4 @@ bandit:
 #target: Zap
 .PHONY: Zap
 Zap:
-	docker run owasp/zap2docker-weekly zap-baseline.py -t https://holmberg.software
+	docker run owasp/zap2docker-weekly zap-baseline.py -t https://mahm.online
