@@ -36,6 +36,8 @@
 #-   name: Install docker   
 #    ansible.builtin.pip:
 #        name: docker
+- name: Pull the latest image from dockerhub
+  command: docker pull mahm17/microblog:flask-exporter
 
 -   name: Start microblog container
     docker_container:
@@ -46,8 +48,8 @@
             DATABASE_URL: mysql+pymysql://microblog:database@{{ groups['database'][0] }}:3306/microblog_db
         ports:
             - "8000:5000"
-        exposed_ports:
-            - "8000"
+        #exposed_ports:
+        #    - "8000"
         pull: yes
 
 #-   name: Pull the statsd container

@@ -1,19 +1,28 @@
 ---
 -   name: Setup prometheus by templating config file
     template:
-        src: prometheus.yml.j2
-        dest: /tmp/prometheus.yml
+        src: templates/prometheus.yml
+        dest: /home/deploy/prometheus.yml
 
 -   name: Create volume for prometheus
     docker_volume:
         name: prometheus-data
+
+-   name: Create prometheus directory if it does not exist
+    file:
+        path: /etc/prometheus
+        state: directory
+        mode: '777'
+
+#-   name: Move prometheus.yml file
+#    command: mv /home/deploy/prometheus.yml /etc/prometheus/prometheus.yml
 
 -   name: Setup prometheus container
     docker_container:
         name: prometheus
         image: prom/prometheus:v2.31.1
         volumes:
-            - /tmp/prometheus.yml:/etc/prometheus/prometheus.yml
+            - /home/deploy/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus-data:/prometheus
         command:
             - "--config.file=/etc/prometheus/prometheus.yml"
