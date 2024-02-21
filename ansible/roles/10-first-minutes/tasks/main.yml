@@ -34,17 +34,24 @@
         shell: /bin/bash
         groups: "{{ server_user_groups }}"
 
-#-   name: Copy sshd_config
-#    copy:
-#        src: files/sshd_conf
-#        dest: /etc/ssh/sshd_config
-
 -   name: Add ssh-key
     authorized_key:
         user: "{{ server_user }}"
         state: present
         key: "{{ lookup('file', item) }}"
     with_items: "{{ pub_ssh_key_location }}"
+
+-   name: Remove old sshd config
+    file:
+        path: /etc/ssh/sshd_config
+        state: absent
+
+-   name: Copy sshd_config
+    template:
+        src: files/sshd_config
+        dest: /etc/ssh/sshd_config
+    notify: 
+        - restart ssh
 
 -   name: Disallow root ssh access
     lineinfile:

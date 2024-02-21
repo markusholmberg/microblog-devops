@@ -24,8 +24,8 @@
 
 -   name: Remove default conf
     file:
-        state: absent
         path: /etc/nginx/sites-enabled/default
+        state: absent
 
 -   name: Template load-balancer conf file to server
     template:

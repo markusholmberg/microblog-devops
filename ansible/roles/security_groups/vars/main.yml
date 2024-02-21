@@ -23,13 +23,13 @@ sg_groups:
             priority: 1003
             direction: Inbound
             source_address_prefix: '0.0.0.0/0'
-        -   name: Exporter
-            protocol: Tcp
-            destination_port_range: 9113
-            access: Allow
-            priority: 1004
-            direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+        #-   name: Exporter
+        #    protocol: Tcp
+        #    destination_port_range: 9113
+        #    access: Allow
+        #    priority: 1004
+        #    direction: Inbound
+        #    source_address_prefix: '0.0.0.0/0'
     -   name: appServer
         port_rules:
         -   name: APP
@@ -45,14 +45,14 @@ sg_groups:
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["loadBalancer"][0] }}/32'
         -   name: node_exporter
             protocol: Tcp
             destination_port_range: 9100
             access: Allow
             priority: 1003
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["monitoring"][0] }}/32'
     -   name: database
         port_rules:
         -   name: SSH
@@ -68,7 +68,7 @@ sg_groups:
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["appServer"][0] }}/32'
         #-   name: node_exporter
         #    protocol: Tcp
         #    destination_port_range: 9100
@@ -91,35 +91,35 @@ sg_groups:
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["monitoring"][0] }}/32'
         -   name: alert
             protocol: Tcp
             destination_port_range: 9093
             access: Allow
             priority: 1003
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["monitoring"][0] }}/32'
         -   name: grafana
             protocol: Tcp
             destination_port_range: 3000
             access: Allow
             priority: 1004
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["loadBalancer"][0] }}/32'
         -   name: node-exporter
             protocol: Tcp
             destination_port_range: 9100
             access: Allow
             priority: 1005
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["monitoring"][0] }}/32'
         -   name: nginx
             protocol: Tcp
             destination_port_range: 9113
             access: Allow
             priority: 1006
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: '{{ groups["monitoring"][0] }}/32'
 #---
 #    sg_groups:
 #        - name: load-balancer
