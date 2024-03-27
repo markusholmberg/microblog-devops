@@ -45,7 +45,9 @@ sg_groups:
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '{{ groups["loadBalancer"][0] }}/32'
+            source_address_prefix: 
+                - '{{ groups["loadBalancer"][0] }}/32'
+                - '{{ groups["monitoring"][0] }}/32'
         -   name: node_exporter
             protocol: Tcp
             destination_port_range: 9100
