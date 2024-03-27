@@ -1,13 +1,28 @@
 version: "3"
 
 networks:
-    monitor:
+    microblog:
 
 volumes:
     prometheus-data: {}
     grafana-data: {}
 
 services:
+    db:
+        image: mysql/mysql-server:5.7
+        container_name: database
+        expose:
+            - "3306"
+        environment:
+            - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+            - MYSQL_DATABASE=microblog_db
+            - MYSQL_USER=microblog
+            - MYSQL_PASSWORD=zxcqweasd123
+        restart:
+            "unless-stopped"
+        networks:
+            - microblog
+
     node-exporter:
         image: prom/node-exporter:v1.2.2
         container_name: node-exporter
@@ -24,7 +39,7 @@ services:
         ports:
             - "9100:9100"
         networks:
-            - monitor
+            - microblog
 
     prometheus:
         image: prom/prometheus:v2.31.1
@@ -40,7 +55,7 @@ services:
             - "--storage.tsdb.retention.time=24h"
             - "--web.enable-lifecycle"
         networks:
-            - monitor
+            - microblog
         ports:
             - "9090:9090"
     
@@ -50,7 +65,7 @@ services:
         volumes: 
             - grafana-data:/var/lib/grafana
         networks:
-            - monitor
+            - microblog
         ports:
             - "3000:3000"
 
@@ -65,25 +80,15 @@ services:
         expose:
             - "5000"
         environment:
-            SECRET_KEY: "my-secret-key"
             DATABASE_URL: mysql+pymysql://microblog:zxcqweasd123@db/microblog_db
         links:
             - db:database
+        depends_on:
+            - db
         restart:
             "unless-stopped"
-
-    db:
-        image: mysql/mysql-server:5.7
-        container_name: database
-        expose:
-            - "3306"
-        environment:
-            - MYSQL_RANDOM_ROOT_PASSWORD="yes"
-            - MYSQL_DATABASE=microblog_db
-            - MYSQL_USER=microblog
-            - MYSQL_PASSWORD=zxcqweasd123
-        restart:
-            "unless-stopped"
+        networks:
+            - microblog
 
 
 
