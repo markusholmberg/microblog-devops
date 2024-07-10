@@ -1,3 +1,4 @@
 -r requirements/prod.txt
 gunicorn >= 19.9.0
 pymysql >= 0.9.3
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
