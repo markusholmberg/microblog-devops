@@ -3,3 +3,4 @@ boto3 >= 1.9.203
 ansible == 4.8.0
 -r https://raw.githubusercontent.com/ansible-collections/azure/8707edf10f94b8d89bca13b060259e23350725c7/requirements-azure.txt
 PyMySQL >= 0.9.3
+ansible-core>=2.14.18rc1 # not directly required, pinned by Snyk to avoid a vulnerability
